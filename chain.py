@@ -85,13 +85,13 @@ third_prompt = PromptTemplate(
     input_variables=["company_name"],
     template="Make sure that: {company_name} only includes (Month day 0:00-0:00)",
 )
-chain_four = LLMChain(llm=llm, prompt=third_prompt)
+chain_three = LLMChain(llm=llm, prompt=third_prompt)
 
 fourth_prompt = PromptTemplate(
     input_variables=["company_name"],
     template="Make sure there are no commas or periods in: {company_name}",
 )
-chain_three = LLMChain(llm=llm, prompt=fourth_prompt)
+chain_four = LLMChain(llm=llm, prompt=fourth_prompt)
 
 from langchain.chains import SimpleSequentialChain
 overall_chain = SimpleSequentialChain(chains=[chain, chain_two, chain_three, chain_four], verbose=True)
