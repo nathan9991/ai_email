@@ -1,1 +1,9 @@
 langchain>=0.0.102
+re
+datetime
+pydantic>=1.10.5
+email
+os
+smtplib
+imaplib
+inspect
