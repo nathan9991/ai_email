@@ -8,6 +8,7 @@ from langchain.prompts.few_shot import FewShotPromptTemplate
 from langchain.chains import LLMChain
 from flask_httpauth import HTTPBasicAuth
 from email.parser import BytesParser
+from email import policy
 auth = HTTPBasicAuth()
 
 MAILERTOGO_SMTP_HOST = os.environ.get('MAILERTOGO_SMTP_HOST')
@@ -27,7 +28,7 @@ def verify_password(username, password):
 @app.route('/603c08641195eca0e603b1f3acabb', methods=['POST'])
 def print_contents():
     body_mime = request.form['body-mime']
-    msg = BytesParser().parsebytes(bytes(body_mime, 'utf-8'))
+    msg = BytesParser(policy=policy.default).parsebytes(bytes('utf-8'))
     msg_body = msg.get_body(preferencelist=('html','plain'))
     print(msg_body)
 @app.route('/send_email', methods=['POST'])
