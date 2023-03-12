@@ -27,25 +27,16 @@ def verify_password(username, password):
 @app.route('/603c08641195eca0e603b1f3acabb', methods=['POST'])
 
 def parse_email():
-    # extract information from the email using parse_qs
-    parsed = parse_qs(request.form)
+        # Get the request data
+    data = request.get_data()
 
-    recipient = parsed.get('recipient', [''])[0]
-    body_mime = parsed.get('body-mime', [''])[0]
-    sender = parsed.get('from', [''])[0]
-    subject = parsed.get('subject', [''])[0]
-    date = parsed.get('date', [''])[0]
+    # Parse the data to extract the email
+    params = parse_qs(data.decode("utf-8"))
+    email = params["email"][0]
 
-    # create a dictionary to store the parsed values
-    parsed_email = {
-        'recipient': recipient,
-        'body_mime': body_mime,
-        'sender': sender,
-        'subject': subject,
-        'date': date
-    }
-    print(parsed_email)
-    return parsed_email
+    # Return the email
+    return email
+
 
 
 @app.route('/send_email', methods=['POST'])
