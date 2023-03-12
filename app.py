@@ -27,6 +27,11 @@ def verify_password(username, password):
 @app.route('/603c08641195eca0e603b1f3acabb', methods=['POST'])
 
 def parse_email():
+    print("Parsing email...")
+    params = parse_qs(request.data)
+    email = params["email"][0]
+    subject = params["subject"][0]
+    message = params["message"][0]
         # Get the request data
     data = request.data
     params = parse_qs(data.decode('utf-8'))
@@ -41,8 +46,8 @@ def parse_email():
     # Parse the data to extract the email
 
     # Return the email
-    print(email)
     return email
+
 
 
 
