@@ -6,6 +6,8 @@ from langchain import OpenAI
 from langchain.prompts import PromptTemplate
 from langchain.prompts.few_shot import FewShotPromptTemplate
 from langchain.chains import LLMChain
+from flask_httpauth import HTTPBasicAuth
+auth = HTTPBasicAuth()
 
 MAILERTOGO_SMTP_HOST = os.environ.get('MAILERTOGO_SMTP_HOST')
 MAILERTOGO_SMTP_PASSWORD = os.environ.get('MAILERTOGO_SMTP_PASSWORD')
@@ -13,11 +15,17 @@ MAILERTOGO_SMTP_USER = os.environ.get('MAILERTOGO_SMTP_USER')
 
 app = Flask(__name__)
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
+@auth.verify_password
+def verify_password(username, password)
+    return username == "Allow"
+
 @app.route('/send_email', methods=['POST'])
+@auth.login_required
 def send_email():
     
 
