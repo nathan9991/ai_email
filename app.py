@@ -27,25 +27,8 @@ def verify_password(username, password):
 @app.route('/603c08641195eca0e603b1f3acabb', methods=['POST'])
 
 def parse_email():
-    email_as_string = request.data
-    message = email.message_from_string(email_as_string)
-
-    email_body = None
-
-    if message.is_multipart():
-
-        for part in message.walk():
-
-            if part.get_content_type() == "text/plain":
-
-                email_body = part.get_payload()
-
-            else:
-
-                email_body = message.get_payload()
-
-    print(email_body)
-    return email_body
+    email = request.form
+    print(email)
 
 
 
