@@ -28,11 +28,17 @@ def verify_password(username, password):
 
 def parse_email():
         # Get the request data
-    data = request.get_data()
+    data = request.data
+    params = parse_qs(data.decode('utf-8'))
 
+    # Check if the email key is present
+    if 'email' not in params:
+        return 'Email not found in request data'
+
+    email = params['email'][0]
+    subject = params['subject'][0]
+    message = params['message'][0]
     # Parse the data to extract the email
-    params = parse_qs(data.decode("utf-8"))
-    email = params["email"][0]
 
     # Return the email
     return email
