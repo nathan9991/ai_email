@@ -27,26 +27,26 @@ def verify_password(username, password):
 @app.route('/603c08641195eca0e603b1f3acabb', methods=['POST'])
 
 def parse_email():
-    print("Parsing email...")
-    params = parse_qs(request.data)
-    email = params["email"][0]
-    subject = params["subject"][0]
-    message = params["message"][0]
-        # Get the request data
-    data = request.data
-    params = parse_qs(data.decode('utf-8'))
+    email_as_string = request.data
+    message = email.message_from_string(email_as_string)
 
-    # Check if the email key is present
-    if 'email' not in params:
-        return 'Email not found in request data'
+    email_body = None
 
-    email = params['email'][0]
-    subject = params['subject'][0]
-    message = params['message'][0]
-    # Parse the data to extract the email
+    if message.is_multipart():
 
-    # Return the email
-    return email
+        for part in message.walk():
+
+            if part.get_content_type() == "text/plain":
+
+                email_body = part.get_payload()
+
+            else:
+
+                email_body = message.get_payload()
+
+    print(email_body)
+    return email_body
+
 
 
 
