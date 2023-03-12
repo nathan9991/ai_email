@@ -21,7 +21,7 @@ def index():
     return render_template('index.html')
 
 @auth.verify_password
-def verify_password(username, password)
+def verify_password(username, password):
     return username == "Allow"
 
 @app.route('/send_email', methods=['POST'])
