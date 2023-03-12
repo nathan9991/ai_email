@@ -8,6 +8,7 @@ from langchain.prompts.few_shot import FewShotPromptTemplate
 from langchain.chains import LLMChain
 from flask_httpauth import HTTPBasicAuth
 from urllib.parse import parse_qs
+from flanker import mime
 auth = HTTPBasicAuth()
 
 MAILERTOGO_SMTP_HOST = os.environ.get('MAILERTOGO_SMTP_HOST')
@@ -29,6 +30,8 @@ def verify_password(username, password):
 def parse_email():
     email = request.form
     print(email)
+    msg = mime.from_string(email)
+    print(msg)
 
 
 

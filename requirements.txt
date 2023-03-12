@@ -5,3 +5,9 @@ Flask==2.1.2
 gunicorn==20.1.0
 requests==2.26.0
 Flask-HTTPAuth==4.7.0
+WebOb==1.8.7
+chardet==5.1.0
+cryptography==39.0.2
+flanker==0.9.11
+ply==3.11
+tld==0.13
