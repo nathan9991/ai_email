@@ -7,8 +7,7 @@ from langchain.prompts import PromptTemplate
 from langchain.prompts.few_shot import FewShotPromptTemplate
 from langchain.chains import LLMChain
 from flask_httpauth import HTTPBasicAuth
-from email.parser import BytesParser
-from email import policy
+from urllib.parse import parse_qs
 auth = HTTPBasicAuth()
 
 MAILERTOGO_SMTP_HOST = os.environ.get('MAILERTOGO_SMTP_HOST')
@@ -26,11 +25,29 @@ def index():
 def verify_password(username, password):
     return username == "Allow"
 @app.route('/603c08641195eca0e603b1f3acabb', methods=['POST'])
-def print_contents():
-    body_mime = request.form['body-mime']
-    msg = BytesParser(policy=policy.default).parsebytes(bytes('utf-8'))
-    msg_body = msg.get_body(preferencelist=('html','plain'))
-    print(msg_body)
+
+def parse_email():
+    # extract information from the email using parse_qs
+    parsed = parse_qs(request.form)
+
+    recipient = parsed.get('recipient', [''])[0]
+    body_mime = parsed.get('body-mime', [''])[0]
+    sender = parsed.get('from', [''])[0]
+    subject = parsed.get('subject', [''])[0]
+    date = parsed.get('date', [''])[0]
+
+    # create a dictionary to store the parsed values
+    parsed_email = {
+        'recipient': recipient,
+        'body_mime': body_mime,
+        'sender': sender,
+        'subject': subject,
+        'date': date
+    }
+    print(parsed_email)
+    return parsed_email
+
+
 @app.route('/send_email', methods=['POST'])
 @auth.login_required
 def send_email():
