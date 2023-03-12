@@ -1,1 +1,1 @@
-handler: python3 chain.py
+web: python3 app.py --port $PORT
