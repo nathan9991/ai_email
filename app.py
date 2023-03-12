@@ -41,6 +41,7 @@ def parse_email():
     # Parse the data to extract the email
 
     # Return the email
+    print(email)
     return email
 
 
