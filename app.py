@@ -166,15 +166,24 @@ def send_email(email_data_dict):
     
     return True
 
-@app.route('/process_email', methods=['POST'])
-def process_email():
-    email_data_dict = parse_email()
-    email_sent = send_email(email_data_dict)
+@app.route('/parse_email', methods=['POST'])
+def parse_email():
+    email_data = request.data
+    email_message = email.message_from_bytes(email_data)
+    sender = email_message['From']
+    subject = email_message['Subject']
+    body = email_message.get_payload()
     
-    if email_sent:
-        return 'Email sent successfully'
-    else:
-        return 'Error sending email'
+    email_data_dict = {
+        'sender': sender,
+        'subject': subject,
+        'body': body
+    }
+
+    # Call send_email() with the parsed email data
+    send_email(email_data_dict)
+    
+    return email_data_dict
 
 
 if __name__ == '__main__':
