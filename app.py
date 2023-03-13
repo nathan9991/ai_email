@@ -30,10 +30,10 @@ def print_contents():
     # print(request.form['body-mime'])
     message_string = request.form['body-mime']
     msg = mime.from_string(message_string)
-    sender_adress = msg.headers.items()['from']
+    sender_address = msg.headers['from']
     regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
 
-    match = re.search(regex, sender_adress)
+    match = re.search(regex, sender_address)
     if match:
         email = match.group()
         print(email)
