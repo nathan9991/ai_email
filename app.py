@@ -16,7 +16,9 @@ MAILERTOGO_SMTP_PASSWORD = os.environ.get('MAILERTOGO_SMTP_PASSWORD')
 MAILERTOGO_SMTP_USER = os.environ.get('MAILERTOGO_SMTP_USER')
 
 app = Flask(__name__)
-
+message = ""
+subject = ""
+email = ""
 
 @app.route('/')
 def index():
@@ -36,24 +38,16 @@ def print_contents():
     match = re.search(regex, sender_address)
     if match:
         email = match.group()
-        print(email)
+        email = email
     else:
         print("No email address found.")
         
-    print(msg.headers['Subject'])
+    subject = msg.headers['Subject']
 
     for part in msg.parts:
         if part.content_type == 'text/plain':
-            print('{}'.format(part.body))
-
-    
-    
-    
-    
-@app.route('/send_email', methods=['POST'])
-@auth.login_required
-def send_email():
-    
+            message = '{}'.format(part.body)
+            
 
     def get_current_date():
         # Get the source code of the function
@@ -65,7 +59,7 @@ def send_email():
     # Get form data
     email = request.form['email']
     subject = request.form['subject']
-    message = request.form['message']
+    message = message
 
     # Set up the connection to the SMTP server
     smtp_server = MAILERTOGO_SMTP_HOST
