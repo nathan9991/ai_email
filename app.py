@@ -25,7 +25,7 @@ def verify_password(username, password):
     return username == "Allow"
 @app.route('/603c08641195eca0e603b1f3acabb', methods=['POST'])
 def print_contents():
-    print(request.form)
+    print(request.form['body_mime'])
 @app.route('/send_email', methods=['POST'])
 @auth.login_required
 def send_email():
