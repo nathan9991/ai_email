@@ -27,16 +27,18 @@ def verify_password(username, password):
     return username == "Allow"
 @app.route('/603c08641195eca0e603b1f3acabb', methods=['POST'])
 
-def parse_email():
-    email = request.form
-    print(email)
-    msg = mime.from_string(email)
-    print(msg.body)
-    
-    for part in msg.parts:
-        print('Content-Type: {} Body: {}'.format(part, part.body))
+def parse_immutable_multidict(multidict):
+    data = {}
 
-    print(msg.enclosed)
+    for key, value in multidict.items():
+        if isinstance(value, list) and len(value) == 1:
+            data[key] = value[0]
+        else:
+            data[key] = value
+
+    return data
+
+print(parse_immutable_multidict(request.form))
 
 
 

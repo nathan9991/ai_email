@@ -11,3 +11,5 @@ cryptography==39.0.2
 flanker==0.9.11
 ply==3.11
 tld==0.13
+Werkzeug==2.2.3
+MarkupSafe>=2.1.1
