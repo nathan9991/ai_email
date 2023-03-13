@@ -10,6 +10,7 @@ from flask_httpauth import HTTPBasicAuth
 from urllib.parse import parse_qs
 from flanker import mime
 import email
+from flask import jsonify
 auth = HTTPBasicAuth()
 
 MAILERTOGO_SMTP_HOST = os.environ.get('MAILERTOGO_SMTP_HOST')
@@ -34,8 +35,14 @@ def parse_email():
     sender = email_message['From']
     subject = email_message['Subject']
     body = email_message.get_payload()
-    return sender, subject, body
-
+    
+    response = jsonify({
+        'sender': sender,
+        'subject': subject,
+        'body': body
+    })
+    
+    return response
 
 def send_email():
     
