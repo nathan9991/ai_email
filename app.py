@@ -42,6 +42,8 @@ def parse_email():
         'body': body
     })
     
+    send_email()
+    
     return response
 
 def send_email():
