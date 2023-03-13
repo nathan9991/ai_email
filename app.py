@@ -7,12 +7,6 @@ from langchain.prompts import PromptTemplate
 from langchain.prompts.few_shot import FewShotPromptTemplate
 from langchain.chains import LLMChain
 from flask_httpauth import HTTPBasicAuth
-from urllib.parse import parse_qs
-from flanker import mime
-import email
-from flask import jsonify
-import base64
-import quopri
 auth = HTTPBasicAuth()
 
 MAILERTOGO_SMTP_HOST = os.environ.get('MAILERTOGO_SMTP_HOST')
@@ -26,40 +20,14 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-# @auth.verify_password
-# def verify_password(username, password):
-#     return username == "Allow"
+@auth.verify_password
+def verify_password(username, password):
+    return username == "Allow"
 @app.route('/603c08641195eca0e603b1f3acabb', methods=['POST'])
-def parse_email():
-    data = request.get_json()
-    if data and 'email' in data:
-        # Decode the email message
-        message = base64.urlsafe_b64decode(data['email']).decode('utf-8')
-
-        # Split the message into headers and body
-        headers, body = message.split('\n\n', 1)
-
-        # Decode the headers and get the content type
-        headers = quopri.decodestring(headers).decode('utf-8')
-        content_type = headers.split('Content-Type: ')[1].split(';')[0]
-
-        # Get the body content
-        if content_type == 'text/plain':
-            content = body
-        elif content_type == 'text/html':
-            content = 'HTML content'
-        else:
-            content = 'Unknown content type'
-
-        # Print some debug info
-        print('Headers:', headers)
-        print('Content type:', content_type)
-        print('Body:', body)
-
-        return content
-
-    return 'No email data found'
-
+def print_contents():
+    print(request.form)
+@app.route('/send_email', methods=['POST'])
+@auth.login_required
 def send_email():
     
 
@@ -70,12 +38,10 @@ def send_email():
         return d2
 
 
-    response = parse_email()
-    
-    # Access the attributes of the response object to get the email data
-    email = response.json['sender']
-    subject = response.json['subject']
-    message = response.json['body']
+    # Get form data
+    email = request.form['email']
+    subject = request.form['subject']
+    message = request.form['message']
 
     # Set up the connection to the SMTP server
     smtp_server = MAILERTOGO_SMTP_HOST
@@ -185,7 +151,4 @@ def send_email():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
-    # app.run()
-
-
+    app.run()
