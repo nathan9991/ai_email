@@ -11,6 +11,8 @@ from urllib.parse import parse_qs
 from flanker import mime
 import email
 from flask import jsonify
+import base64
+import quopri
 auth = HTTPBasicAuth()
 
 MAILERTOGO_SMTP_HOST = os.environ.get('MAILERTOGO_SMTP_HOST')
@@ -29,16 +31,34 @@ def index():
 #     return username == "Allow"
 @app.route('/603c08641195eca0e603b1f3acabb', methods=['POST'])
 def parse_email():
-    # Get the message body, subject, and who it's from
-    body_mime = request.form.get('body-mime')
-    body = body_mime.split('\n\n', 1)[1]
-    subject = request.form.get('subject')
-    sender = request.form.get('from')
-    
-    # Do something with the message data
-    print(f"Received an email from {sender} with subject '{subject}' and body '{body}'")
+    data = request.get_json()
+    if data and 'email' in data:
+        # Decode the email message
+        message = base64.urlsafe_b64decode(data['email']).decode('utf-8')
 
-    return '', 204
+        # Split the message into headers and body
+        headers, body = message.split('\n\n', 1)
+
+        # Decode the headers and get the content type
+        headers = quopri.decodestring(headers).decode('utf-8')
+        content_type = headers.split('Content-Type: ')[1].split(';')[0]
+
+        # Get the body content
+        if content_type == 'text/plain':
+            content = body
+        elif content_type == 'text/html':
+            content = 'HTML content'
+        else:
+            content = 'Unknown content type'
+
+        # Print some debug info
+        print('Headers:', headers)
+        print('Content type:', content_type)
+        print('Body:', body)
+
+        return content
+
+    return 'No email data found'
 
 def send_email():
     
