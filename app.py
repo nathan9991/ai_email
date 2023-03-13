@@ -38,7 +38,6 @@ def print_contents():
     match = re.search(regex, sender_address)
     if match:
         email = match.group()
-        email = email
     else:
         print("No email address found.")
         
@@ -57,8 +56,8 @@ def print_contents():
 
 
     # Get form data
-    email = request.form['email']
-    subject = request.form['subject']
+    email = email
+    subject = subject
     message = message
 
     # Set up the connection to the SMTP server
