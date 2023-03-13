@@ -29,22 +29,16 @@ def index():
 #     return username == "Allow"
 @app.route('/603c08641195eca0e603b1f3acabb', methods=['POST'])
 def parse_email():
-    email_data = request.data
-    #email_data = email_data.decode('utf-8')
-    email_message = email.message_from_bytes(email_data)
-    sender = email_message['From']
-    subject = email_message['Subject']
-    body = email_message.get_payload()
+    # Get the message body, subject, and who it's from
+    body_mime = request.form.get('body-mime')
+    body = body_mime.split('\n\n', 1)[1]
+    subject = request.form.get('subject')
+    sender = request.form.get('from')
     
-    response = jsonify({
-        'sender': sender,
-        'subject': subject,
-        'body': body
-    })
-    
-    send_email()
-    
-    return response
+    # Do something with the message data
+    print(f"Received an email from {sender} with subject '{subject}' and body '{body}'")
+
+    return '', 204
 
 def send_email():
     
@@ -171,6 +165,7 @@ def send_email():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
+    # app.run()
 
 
