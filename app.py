@@ -9,6 +9,7 @@ from langchain.chains import LLMChain
 from flask_httpauth import HTTPBasicAuth
 from urllib.parse import parse_qs
 from flanker import mime
+import email
 auth = HTTPBasicAuth()
 
 MAILERTOGO_SMTP_HOST = os.environ.get('MAILERTOGO_SMTP_HOST')
@@ -22,25 +23,20 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-@auth.verify_password
-def verify_password(username, password):
-    return username == "Allow"
+# @auth.verify_password
+# def verify_password(username, password):
+#     return username == "Allow"
 @app.route('/603c08641195eca0e603b1f3acabb', methods=['POST'])
 def parse_email():
     email_data = request.data
-    email_data = email_data.decode('utf-8')
-    print(email_data)
-    return "Email received"
-
-    
-
-
-
+    #email_data = email_data.decode('utf-8')
+    email_message = email.message_from_bytes(email_data)
+    sender = email_message['From']
+    subject = email_message['Subject']
+    body = email_message.get_payload()
+    return sender, subject, body
 
 
-
-@app.route('/send_email', methods=['POST'])
-@auth.login_required
 def send_email():
     
 
@@ -52,9 +48,9 @@ def send_email():
 
 
     # Get form data
-    email = request.form['email']
-    subject = request.form['subject']
-    message = request.form['message']
+    email = parse_email[0]
+    subject = parse_email[1]
+    message = parse_email[2]
 
     # Set up the connection to the SMTP server
     smtp_server = MAILERTOGO_SMTP_HOST
