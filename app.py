@@ -39,6 +39,12 @@ def print_contents():
         print(email)
     else:
         print("No email address found.")
+        
+    print(msg.headers['Subject'])
+
+    for part in msg.parts:
+        print('Content-Type: {} Body: {}'.format(part, part.body))
+
     
     
     
