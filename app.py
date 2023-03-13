@@ -29,7 +29,7 @@ def print_contents():
     # print(request.form['body-mime'])
     message_string = request.form['body-mime']
     msg = mime.from_string(message_string)
-    print(msg.heaoders.items())
+    print(msg.headers.items())
     
     
     
