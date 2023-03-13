@@ -54,10 +54,12 @@ def send_email():
         return d2
 
 
-    # Get form data
-    email = parse_email[0]
-    subject = parse_email[1]
-    message = parse_email[2]
+    response = parse_email()
+    
+    # Access the attributes of the response object to get the email data
+    email = response.json['sender']
+    subject = response.json['subject']
+    message = response.json['body']
 
     # Set up the connection to the SMTP server
     smtp_server = MAILERTOGO_SMTP_HOST
