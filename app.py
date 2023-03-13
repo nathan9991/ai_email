@@ -43,7 +43,8 @@ def print_contents():
     print(msg.headers['Subject'])
 
     for part in msg.parts:
-        print('Content-Type: {} Body: {}'.format(part, part.body))
+        if part.content_type == 'text/plain':
+            print('Body: {}'.format(part.body))
 
     
     
