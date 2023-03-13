@@ -30,23 +30,21 @@ def index():
 @app.route('/603c08641195eca0e603b1f3acabb', methods=['POST'])
 def parse_email():
     email_data = request.data
-    #email_data = email_data.decode('utf-8')
     email_message = email.message_from_bytes(email_data)
     sender = email_message['From']
     subject = email_message['Subject']
     body = email_message.get_payload()
     
-    response = jsonify({
+    email_data_dict = {
         'sender': sender,
         'subject': subject,
         'body': body
-    })
+    }
     
-    send_email()
-    
-    return response
+    return email_data_dict
 
-def send_email():
+
+def send_email(email_data_dict):
     
 
     def get_current_date():
@@ -56,12 +54,11 @@ def send_email():
         return d2
 
 
-    response = parse_email()
     
     # Access the attributes of the response object to get the email data
-    email = response.json['sender']
-    subject = response.json['subject']
-    message = response.json['body']
+    email = email_data_dict['sender']
+    subject = email_data_dict['subject']
+    message = email_data_dict['body']
 
     # Set up the connection to the SMTP server
     smtp_server = MAILERTOGO_SMTP_HOST
@@ -167,7 +164,17 @@ def send_email():
     # Close the SMTP connection
     smtp_connection.quit()
     
-    return "Email sent successfully!"
+    return True
+
+@app.route('/process_email', methods=['POST'])
+def process_email():
+    email_data_dict = parse_email()
+    email_sent = send_email(email_data_dict)
+    
+    if email_sent:
+        return 'Email sent successfully'
+    else:
+        return 'Error sending email'
 
 
 if __name__ == '__main__':
