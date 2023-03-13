@@ -44,7 +44,7 @@ def print_contents():
 
     for part in msg.parts:
         if part.content_type == 'text/plain':
-            print('Body: {}'.format(part.body))
+            print('{}'.format(part.body))
 
     
     
