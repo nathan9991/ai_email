@@ -28,8 +28,9 @@ def verify_password(username, password):
 @app.route('/603c08641195eca0e603b1f3acabb', methods=['POST'])
 def parse_email():
     email_data = request.data
-    email_data = request.data.decode('utf-8')
+    email_data = email_data.decode('utf-8')
     print(email_data)
+    return "Email received"
 
     
 
