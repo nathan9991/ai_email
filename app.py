@@ -31,7 +31,12 @@ def parse_email():
     email = request.form
     print(email)
     msg = mime.from_string(email)
-    print(msg)
+    print(msg.body)
+    
+    for part in msg.parts:
+        print('Content-Type: {} Body: {}'.format(part, part.body))
+
+    print(msg.enclosed)
 
 
 
