@@ -152,7 +152,7 @@ def print_contents():
     to_address = email
     subject = subject
     body = catchphrase
-    message = f'To: Re: {to_address}\r\nFrom: {from_address}\r\nSubject: {subject}\r\n\r\n{body}'
+    message = f'To: {to_address}\r\nFrom: {from_address}\r\nSubject: Re: {subject}\r\n\r\n{body}'
 
     try:
         # Send the email
